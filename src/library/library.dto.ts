@@ -2,6 +2,12 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class AuthorDto {
   @ApiPropertyOptional({
+    description: 'Author ID',
+    example: 'mvhgr30j5u3mnkk0a6tfct7o',
+  })
+  authorId?: string;
+
+  @ApiPropertyOptional({
     description: 'Author first name',
     example: 'Jane',
   })
@@ -22,6 +28,12 @@ export class AuthorDto {
 
 export class GenreDto {
   @ApiPropertyOptional({
+    description: 'Genre ID',
+    example: 'tso9ysj1ojgc4xlpblr5dc87',
+  })
+  genreId?: string;
+
+  @ApiPropertyOptional({
     description: 'The genre name',
     example: 'Science Fiction',
   })
@@ -29,6 +41,12 @@ export class GenreDto {
 }
 
 export class BookDto {
+  @ApiPropertyOptional({
+    description: 'Book ID',
+    example: 'tso9ysj1ojgc4xlpblr5dc87',
+  })
+  bookId?: string;
+  
   @ApiPropertyOptional({
     description: 'The title of the book',
     example: 'The Hobbit',
