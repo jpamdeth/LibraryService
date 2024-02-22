@@ -1,0 +1,36 @@
+generator client {
+  provider      = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model Author {
+    id              String      @id @default(cuid())
+    firstName      String?      @map("first_name")
+    lastName       String?      @map("last_name")
+    bio             String?     @db.VarChar(2000)
+    books           Book[]
+}
+
+model Genre {
+    id              String      @id @default(cuid())
+    genre           String
+    books           Book[]
+}
+
+model Book {
+    id              String      @id @default(cuid())
+    title           String
+    description     String?     @db.VarChar(2000)
+    authorId        String      @map("author_id")
+    author          Author      @relation(fields: [authorId], references: [id])
+    genreId         String?     @map("genre_id")
+    genre           Genre?      @relation(fields: [genreId], references: [id])
+    published       DateTime
+    series          String?
+    seriesNumber    Int?        @map("series_number")
+    edition         String?
+}
