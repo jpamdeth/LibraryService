@@ -24,8 +24,7 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 RUN npm install prisma
-ENV DATABASE_URL=mysql://root:rootTopsecret@nest-mysql:3306/beatsheet
-ENV OPENAI_API_KEY=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
+ENV DATABASE_URL=mysql://library:library@nest-mysql:3306/library
 
 EXPOSE 3000
 

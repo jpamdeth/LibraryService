@@ -3,7 +3,8 @@ import { LibraryService } from './library.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { OpenAIService } from '../openai/openai.service';
-import { BookDto } from './library.dto';
+import { AuthorDto, BookDto, GenreDto } from './library.dto';
+import { Author } from './library.models';
 
 describe('LibraryService', () => {
   let service: LibraryService;
@@ -38,47 +39,80 @@ describe('LibraryService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should save an author', async () => {
-    const author = {
+  it('should create an author', async () => {
+    const author: AuthorDto = {
       firstName: 'Jane',
       lastName: 'Doe',
     };
-    prismaService.author.upsert = jest.fn().mockResolvedValue(author);
-    const result = await service.saveAuthor(author);
-    expect(prismaService.author.upsert).toHaveBeenCalledWith({
-      where: { id: undefined },
-      update: author,
-      create: author,
+    prismaService.author.create = jest.fn().mockResolvedValue(author);
+    const result = await service.createAuthor(author);
+    expect(prismaService.author.create).toHaveBeenCalledWith({ data: author });
+    expect(result).toEqual(author);
+  });
+
+  it ('should update an author', async () => {
+    const author: AuthorDto = {
+      authorId: 'mvhgr30j5u3mnkk0a6tfct7o',
+      firstName: 'Jane',
+      lastName: 'Doe',
+    };
+    prismaService.author.update = jest.fn().mockResolvedValue(author);
+    const result = await service.updateAuthor(author, author.authorId);
+    expect(prismaService.author.update).toHaveBeenCalledWith({
+      where: { id: author.authorId },
+      data: author,
     });
     expect(result).toEqual(author);
   });
 
-  it('should save a genre', async () => {
-    const genre = {
+  it('should create a genre', async () => {
+    const genre: GenreDto = {
       genre: 'Science Fiction',
     };
-    prismaService.genre.upsert = jest.fn().mockResolvedValue(genre);
-    const result = await service.saveGenre(genre);
-    expect(prismaService.genre.upsert).toHaveBeenCalledWith({
-      where: { id: undefined },
-      update: genre,
-      create: genre,
+    prismaService.genre.create = jest.fn().mockResolvedValue(genre);
+    const result = await service.createGenre(genre);
+    expect(prismaService.genre.create).toHaveBeenCalledWith({ data: genre });
+    expect(result).toEqual(genre);
+  });
+
+  it('should update a genre', async () => {
+    const genre: GenreDto = {
+      genreId: 'mvhgr30j5u3mnkk0a6tfct7o',
+      genre: 'Science Fiction',
+    };
+    prismaService.genre.update = jest.fn().mockResolvedValue(genre);
+    const result = await service.updateGenre(genre, genre.genreId);
+    expect(prismaService.genre.update).toHaveBeenCalledWith({
+      where: { id: genre.genreId },
+      data: genre,
     });
     expect(result).toEqual(genre);
   });
 
-  it('should save a book', async () => {
+  it('should create a book', async () => {
     const book: BookDto = {
       title: 'The Hobbit',
       authorId: 'mvhgr30j5u3mnkk0a6tfct7o',
       published: new Date(),
     };
-    prismaService.book.upsert = jest.fn().mockResolvedValue(book);
-    const result = await service.saveBook(book);
-    expect(prismaService.book.upsert).toHaveBeenCalledWith({
-      where: { id: undefined },
-      update: book,
-      create: book,
+    prismaService.book.create = jest.fn().mockResolvedValue(book);
+    const result = await service.createBook(book);
+    expect(prismaService.book.create).toHaveBeenCalledWith({ data: book });
+    expect(result).toEqual(book);
+  });
+
+  it ('should update a book', async () => {
+    const book: BookDto = {
+      bookId: 'mvhgr30j5u3mnkk0a6tfct7o',
+      title: 'The Hobbit',
+      authorId: 'mvhgr30j5u3mnkk0a6tfct7o',
+      published: new Date(),
+    };
+    prismaService.book.update = jest.fn().mockResolvedValue(book);
+    const result = await service.updateBook(book, book.bookId);
+    expect(prismaService.book.update).toHaveBeenCalledWith({
+      where: { id: book.bookId },
+      data: book,
     });
     expect(result).toEqual(book);
   });
@@ -93,6 +127,13 @@ describe('LibraryService', () => {
     const result = await service.getAuthor(author.id);
     expect(prismaService.author.findUnique).toHaveBeenCalledWith({
       where: { id: author.id },
+      include: { 
+        books: {
+          include: {
+            genre: true 
+          },
+        },
+      },
     });
     expect(result).toEqual(author);
   });
@@ -150,21 +191,18 @@ describe('LibraryService', () => {
   });
 
   it('should create and suggest books', async () => {
-    const author = {
+    const author: Author = {
+      id: 'mvhgr30j5u3mnkk0a6tfct7o',
       firstName: 'Jane',
       lastName: 'Doe',
     };
-    prismaService.author.upsert = jest.fn().mockResolvedValue(author);
+    prismaService.author.create = jest.fn().mockResolvedValue(author);
     prismaService.author.findUnique = jest.fn().mockResolvedValue(author);
     openaiService.getSuggestions = jest
         .fn()
         .mockResolvedValue('your suggestions');
     const result = await service.createAndSuggestBooks(author.firstName, author.lastName);
-    expect(prismaService.author.upsert).toHaveBeenCalledWith({
-      where: { id: undefined },
-      update: author,
-      create: author,
-    });
+    expect(prismaService.author.create).toHaveBeenCalledWith({data: {firstName: author.firstName, lastName: author.lastName}});
     expect(result).toEqual('your suggestions');
   });
 });

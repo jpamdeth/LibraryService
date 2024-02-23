@@ -15,30 +15,61 @@ export class LibraryService {
     private openai: OpenAIService,
   ) {}
 
-  async saveAuthor(author: AuthorDto): Promise<Author> {
+  async getAuthors(): Promise<Author[]> {
+    this.logger.debug('Getting all authors');
+    return this.prisma.author.findMany();
+  }
+
+  async createAuthor(author: AuthorDto): Promise<Author> {
     this.logger.debug('Saving author ' + author.firstName + ' ' + author.lastName);
-    return this.prisma.author.upsert({ 
-      where: { id: author.authorId },
-      update: author,
-      create: author,
+    return this.prisma.author.create(
+      { data: author }
+    );
+  }
+
+  async updateAuthor(author: AuthorDto, authorId: string): Promise<Author> {
+    this.logger.debug('Updating author ' + authorId);
+    return this.prisma.author.update({
+      where: { id: authorId },
+      data: author,
     });
   }
 
-  async saveGenre(genre: GenreDto): Promise<Genre> {
+  async createGenre(genre: GenreDto): Promise<Genre> {
     this.logger.debug('Saving genre ' + genre.genre);
-    return this.prisma.genre.upsert({ 
-      where: { id: genre.genreId },
-      update: genre,
-      create: genre,
+    return this.prisma.genre.create({ data: genre });
+  }
+
+  async updateGenre(genre: GenreDto, genreId: string): Promise<Genre> {
+    this.logger.debug('Updating genre ' + genreId);
+    return this.prisma.genre.update({
+      where: { id: genreId },
+      data: genre,
     });
   }
 
-  async saveBook(book: BookDto): Promise<Book> {
+  async createBook(book: BookDto): Promise<Book> {
     this.logger.debug('Saving book ' + book.title);
-    return this.prisma.book.upsert({ 
-      where: { id: book.bookId },
-      update: book,
-      create: book,
+    if (book.published) {
+      book.published = new Date(book.published);
+      if (book.published.toString() === 'Invalid Date') {
+        throw new BadInputException('Invalid date format for published date');
+      }
+    }
+    return this.prisma.book.create({ data: book });
+  }
+
+  async updateBook(book: BookDto, bookId: string): Promise<Book> {
+    this.logger.debug('Updating book ' + bookId);
+    if (book.published) {
+      book.published = new Date(book.published);
+      if (book.published.toString() === 'Invalid Date') {
+        throw new BadInputException('Invalid date format for published date');
+      }
+    }
+    return this.prisma.book.update({
+      where: { id: bookId },
+      data: book,
     });
   }
 
@@ -46,6 +77,13 @@ export class LibraryService {
     this.logger.debug('Getting author ' + authorId);
     return this.prisma.author.findUnique({
       where: { id: authorId },
+      include: { 
+        books: {
+          include: {
+            genre: true 
+          },
+        },
+      },
     });
   }
 
@@ -85,7 +123,7 @@ export class LibraryService {
   }
 
   async createAndSuggestBooks(firstName: string, lastName: string): Promise<string> {
-    const author = await this.saveAuthor({ firstName, lastName });
+    const author = await this.createAuthor({ firstName, lastName });
     return this.suggestBooks(author.id);
   }
 

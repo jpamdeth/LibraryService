@@ -29,7 +29,7 @@ model Book {
     author          Author      @relation(fields: [authorId], references: [id])
     genreId         String?     @map("genre_id")
     genre           Genre?      @relation(fields: [genreId], references: [id])
-    published       DateTime
+    published       DateTime    @db.Date
     series          String?
     seriesNumber    Int?        @map("series_number")
     edition         String?

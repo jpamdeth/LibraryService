@@ -12,7 +12,7 @@ services:
       nest-mysql:
         condition: service_healthy
     environment:
-      - DATABASE_URL=mysql://library:library@nest-mysql:3306/library
+      - DATABASE_URL=mysql://root:rootTopsecret@nest-mysql:3306/library
 
   nest-mysql:
     image: mysql:8
@@ -23,7 +23,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=rootTopsecret
     healthcheck:
-      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'library', '-p library' ]
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p rootTopsecret' ]
       timeout: 20s
       retries: 10
     volumes:
