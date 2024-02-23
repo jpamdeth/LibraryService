@@ -122,12 +122,12 @@ export class LibraryService {
     });
   }
 
-  async createAndSuggestBooks(firstName: string, lastName: string): Promise<string> {
+  async createAndSuggestBooks(firstName: string, lastName: string, apiKey: string): Promise<string> {
     const author = await this.createAuthor({ firstName, lastName });
-    return this.suggestBooks(author.id);
+    return this.suggestBooks(author.id, apiKey);
   }
 
-  async suggestBooks(authorId: string): Promise<string> {
+  async suggestBooks(authorId: string, apiKey: string): Promise<string> {
     this.logger.debug('Suggesting books for author ' + authorId);
 
     const author: Author = await this.prisma.author.findUnique({
@@ -159,6 +159,6 @@ export class LibraryService {
       }
     }
 
-    return this.openai.getSuggestions(messages);
+    return this.openai.getSuggestions(messages, apiKey);
   }
 }

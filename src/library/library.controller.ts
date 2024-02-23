@@ -97,18 +97,19 @@ export class LibraryController {
     return this.service.deleteBook(bookId);
   }
 
-  @Get('suggestions/:authorId')
+  @Get('suggestions/:authorId/:apiKey')
   @ApiOperation({ summary: 'get book suggestions for an author' })
-  async getSuggestions(@Param('authorId') authorId: string) {
-    return this.service.suggestBooks(authorId);
+  async getSuggestions(@Param('authorId') authorId: string, @Param('apiKey') apiKey: string) {
+    return this.service.suggestBooks(authorId, apiKey);
   }
 
-  @Get('suggestions/:firstName/:lastName')
+  @Get('suggestions/:firstName/:lastName/:apiKey')
   @ApiOperation({ summary: 'get book suggestions for an author' })
   async getSuggestionsByName(
     @Param('firstName') firstName: string,
     @Param('lastName') lastName: string,
+    @Param('apiKey') apiKey: string,
   ) {
-    return this.service.createAndSuggestBooks(firstName, lastName);
+    return this.service.createAndSuggestBooks(firstName, lastName, apiKey);
   }
 }

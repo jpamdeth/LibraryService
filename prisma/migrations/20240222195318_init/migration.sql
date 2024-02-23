@@ -23,7 +23,7 @@ CREATE TABLE `Book` (
     `description` VARCHAR(2000) NULL,
     `author_id` VARCHAR(191) NOT NULL,
     `genre_id` VARCHAR(191) NULL,
-    `published` DATETIME(3) NOT NULL,
+    `published` DATE NOT NULL,
     `series` VARCHAR(191) NULL,
     `series_number` INTEGER NULL,
     `edition` VARCHAR(191) NULL,

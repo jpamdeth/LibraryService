@@ -7,15 +7,16 @@ export class OpenAIService {
   private readonly logger = new Logger(OpenAIService.name);
   private openai: OpenAI;
 
-  constructor() {
-    this.openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-  }
-
   async getSuggestions(
     messages: ChatCompletionMessageParam[],
+    apiKey: string,
   ): Promise<string> {
+    if (!this.openai) {
+      this.openai = new OpenAI({
+        apiKey: apiKey,
+      });
+    }
+
     const completion: ChatCompletion =
       await this.openai.chat.completions.create({
         messages: messages,

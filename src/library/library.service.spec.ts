@@ -201,7 +201,7 @@ describe('LibraryService', () => {
     openaiService.getSuggestions = jest
         .fn()
         .mockResolvedValue('your suggestions');
-    const result = await service.createAndSuggestBooks(author.firstName, author.lastName);
+    const result = await service.createAndSuggestBooks(author.firstName, author.lastName, 'testapikey');
     expect(prismaService.author.create).toHaveBeenCalledWith({data: {firstName: author.firstName, lastName: author.lastName}});
     expect(result).toEqual('your suggestions');
   });
