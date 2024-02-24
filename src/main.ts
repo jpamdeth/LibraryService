@@ -27,6 +27,7 @@ async function bootstrap() {
         return new BadRequestException(result);
       },
       stopAtFirstError: false,
+      skipMissingProperties: true,
     }),
   );
   await app.listen(3000);

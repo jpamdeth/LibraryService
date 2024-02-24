@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { OpenAIService } from '../openai/openai.service';
 import { ChatCompletionMessageParam } from 'openai/resources';
-import { BadInputException } from './library.exception';
 import { Author, Book, Genre } from './library.models';
 import { AuthorDto, BookDto, GenreDto } from './library.dto';
 
@@ -50,23 +49,11 @@ export class LibraryService {
 
   async createBook(book: BookDto): Promise<Book> {
     this.logger.debug('Saving book ' + book.title);
-    if (book.published) {
-      book.published = new Date(book.published);
-      if (book.published.toString() === 'Invalid Date') {
-        throw new BadInputException('Invalid date format for published date');
-      }
-    }
     return this.prisma.book.create({ data: book });
   }
 
   async updateBook(book: BookDto, bookId: string): Promise<Book> {
     this.logger.debug('Updating book ' + bookId);
-    if (book.published) {
-      book.published = new Date(book.published);
-      if (book.published.toString() === 'Invalid Date') {
-        throw new BadInputException('Invalid date format for published date');
-      }
-    }
     return this.prisma.book.update({
       where: { id: bookId },
       data: book,
@@ -143,8 +130,8 @@ export class LibraryService {
     messages.push({
       role: 'user',
       content: `If I have any books from author ${author.firstName} ${author.lastName} 
-      they are listed following.  Can you suggest some other titles?. Please use JSON format for the response.  
-      This is the JSON format:    
+      they are listed following.  Can you suggest some other titles?. 
+      Please use JSON format for the response.  This is the JSON format:    
       title: string;
       description?: string;
       authorId: ${authorId};
