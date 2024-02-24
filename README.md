@@ -3,7 +3,7 @@ This microservice provides features related to books in a library.
 This service is written in Typescript and uses the NestJs application framework.  Package management is done with Node.js.  Data storage is in MySQL, with Prisma providing ORM features.  The unit tests use Jest.
 
 ## Getting Started
-This service can be run locally with a standalone MySQL installation.  A script is provided to handle creating the database schema and seeding sample records, before starting the service.  Seeding is idempotent, and will not duplicate or overwrite changes on subsequent runs.  It will recreate the records if the parent 'Library' record is deleted.  Edit the values in '.env' to match your local installation.
+This service can be run locally with a standalone MySQL installation.  A script is provided to handle creating the database schema, before starting the service.  Create '.env' to configure your local installation.
  - `npm run startup`
 
 After the initial startup and schema deployment, the service can be started with 
@@ -12,7 +12,7 @@ After the initial startup and schema deployment, the service can be started with
 Alternately, the service can be run in a Docker container alongside a containerized MySQL instance.  With Docker installed and the engine started, use:
  - `docker compose up`
 
-This will pull images with Node, install dependencies, build and copy relevant files, deploy and seed the DB schema and start the service.  
+This will pull images with Node, install dependencies, build and copy relevant files, deploy the DB schema and start the service.  
 
 Service will be available on localhost, port 3000 via either method.
  - http://localhost:3000/health
