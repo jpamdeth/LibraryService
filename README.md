@@ -28,4 +28,4 @@ The API docs are available in swagger.json or live in the running application at
 The live version also supports running sample requests to the service.
 
 ## AI Integration
-This service integrates with OpenAI's ChatGPT functionality to provide generated responses recommending new content given the description of existing content.  An API Key is provided to support this functionality, but there is a small fee associated with each use.  Once this project has been evaluated, I will remove the key from my account.
+This service integrates with OpenAI's ChatGPT functionality to provide generated responses recommending new content given the description of existing content.  Provide your API key to use this funcitonality.
