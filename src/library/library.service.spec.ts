@@ -50,7 +50,7 @@ describe('LibraryService', () => {
     expect(result).toEqual(author);
   });
 
-  it ('should update an author', async () => {
+  it('should update an author', async () => {
     const author: AuthorDto = {
       authorId: 'mvhgr30j5u3mnkk0a6tfct7o',
       firstName: 'Jane',
@@ -101,7 +101,7 @@ describe('LibraryService', () => {
     expect(result).toEqual(book);
   });
 
-  it ('should update a book', async () => {
+  it('should update a book', async () => {
     const book: BookDto = {
       bookId: 'mvhgr30j5u3mnkk0a6tfct7o',
       title: 'The Hobbit',
@@ -127,10 +127,10 @@ describe('LibraryService', () => {
     const result = await service.getAuthor(author.id);
     expect(prismaService.author.findUnique).toHaveBeenCalledWith({
       where: { id: author.id },
-      include: { 
+      include: {
         books: {
           include: {
-            genre: true 
+            genre: true,
           },
         },
       },
@@ -168,7 +168,7 @@ describe('LibraryService', () => {
 
   it('should delete an author', async () => {
     prismaService.author.delete = jest.fn();
-    const result = await service.deleteAuthor('test');
+    await service.deleteAuthor('test');
     expect(prismaService.author.delete).toHaveBeenCalledWith({
       where: { id: 'test' },
     });
@@ -176,7 +176,7 @@ describe('LibraryService', () => {
 
   it('should delete a genre', async () => {
     prismaService.genre.delete = jest.fn();
-    const result = await service.deleteGenre('test');
+    await service.deleteGenre('test');
     expect(prismaService.genre.delete).toHaveBeenCalledWith({
       where: { id: 'test' },
     });
@@ -184,7 +184,7 @@ describe('LibraryService', () => {
 
   it('should delete a book', async () => {
     prismaService.book.delete = jest.fn();
-    const result = await service.deleteBook('test');
+    await service.deleteBook('test');
     expect(prismaService.book.delete).toHaveBeenCalledWith({
       where: { id: 'test' },
     });
@@ -199,10 +199,16 @@ describe('LibraryService', () => {
     prismaService.author.create = jest.fn().mockResolvedValue(author);
     prismaService.author.findUnique = jest.fn().mockResolvedValue(author);
     openaiService.getSuggestions = jest
-        .fn()
-        .mockResolvedValue('your suggestions');
-    const result = await service.createAndSuggestBooks(author.firstName, author.lastName, 'testapikey');
-    expect(prismaService.author.create).toHaveBeenCalledWith({data: {firstName: author.firstName, lastName: author.lastName}});
+      .fn()
+      .mockResolvedValue('your suggestions');
+    const result = await service.createAndSuggestBooks(
+      author.firstName,
+      author.lastName,
+      'testapikey',
+    );
+    expect(prismaService.author.create).toHaveBeenCalledWith({
+      data: { firstName: author.firstName, lastName: author.lastName },
+    });
     expect(result).toEqual('your suggestions');
   });
 });

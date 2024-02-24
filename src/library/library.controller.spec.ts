@@ -95,7 +95,12 @@ describe('LibraryController', () => {
   describe('getBook', () => {
     it('should return a book', async () => {
       const bookId = '1';
-      const book: Book = { id: bookId, title: 'The Hobbit', authorId: '1', published: new Date()};
+      const book: Book = {
+        id: bookId,
+        title: 'The Hobbit',
+        authorId: '1',
+        published: new Date(),
+      };
       sheetService.getBook = jest.fn().mockResolvedValue(book);
       expect(await sheetController.getBook(bookId)).toBe(book);
     });
@@ -103,7 +108,12 @@ describe('LibraryController', () => {
 
   describe('saveBook', () => {
     it('should save a book', async () => {
-      const book: BookDto = { bookId: '1', title: 'The Hobbit', authorId: '1', published: new Date()};
+      const book: BookDto = {
+        bookId: '1',
+        title: 'The Hobbit',
+        authorId: '1',
+        published: new Date(),
+      };
       sheetService.createBook = jest.fn().mockResolvedValue(book);
       expect(await sheetController.saveBook(book)).toBe(book);
     });
@@ -111,7 +121,12 @@ describe('LibraryController', () => {
 
   describe('updateBook', () => {
     it('should update a book', async () => {
-      const book: BookDto = { bookId: '1', title: 'The Hobbit', authorId: '1', published: new Date()};
+      const book: BookDto = {
+        bookId: '1',
+        title: 'The Hobbit',
+        authorId: '1',
+        published: new Date(),
+      };
       sheetService.updateBook = jest.fn().mockResolvedValue(book);
       expect(await sheetController.updateBook(book, '1')).toBe(book);
     });

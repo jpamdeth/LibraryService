@@ -46,7 +46,7 @@ export class BookDto {
     example: 'tso9ysj1ojgc4xlpblr5dc87',
   })
   bookId?: string;
-  
+
   @ApiPropertyOptional({
     description: 'The title of the book',
     example: 'The Hobbit',

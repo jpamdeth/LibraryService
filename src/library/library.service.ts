@@ -21,10 +21,10 @@ export class LibraryService {
   }
 
   async createAuthor(author: AuthorDto): Promise<Author> {
-    this.logger.debug('Saving author ' + author.firstName + ' ' + author.lastName);
-    return this.prisma.author.create(
-      { data: author }
+    this.logger.debug(
+      'Saving author ' + author.firstName + ' ' + author.lastName,
     );
+    return this.prisma.author.create({ data: author });
   }
 
   async updateAuthor(author: AuthorDto, authorId: string): Promise<Author> {
@@ -77,10 +77,10 @@ export class LibraryService {
     this.logger.debug('Getting author ' + authorId);
     return this.prisma.author.findUnique({
       where: { id: authorId },
-      include: { 
+      include: {
         books: {
           include: {
-            genre: true 
+            genre: true,
           },
         },
       },
@@ -122,7 +122,11 @@ export class LibraryService {
     });
   }
 
-  async createAndSuggestBooks(firstName: string, lastName: string, apiKey: string): Promise<string> {
+  async createAndSuggestBooks(
+    firstName: string,
+    lastName: string,
+    apiKey: string,
+  ): Promise<string> {
     const author = await this.createAuthor({ firstName, lastName });
     return this.suggestBooks(author.id, apiKey);
   }

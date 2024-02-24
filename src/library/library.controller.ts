@@ -36,7 +36,10 @@ export class LibraryController {
 
   @Put('authors/:authorId')
   @ApiOperation({ summary: 'update an author' })
-  async updateAuthor(@Body() author: AuthorDto, @Param('authorId') authorId: string) {
+  async updateAuthor(
+    @Body() author: AuthorDto,
+    @Param('authorId') authorId: string,
+  ) {
     return this.service.updateAuthor(author, authorId);
   }
 
@@ -61,7 +64,10 @@ export class LibraryController {
 
   @Put('genres/:genreId')
   @ApiOperation({ summary: 'update a genre' })
-  async updateGenre(@Body() genre: GenreDto, @Param('genreId') genreId: string) {
+  async updateGenre(
+    @Body() genre: GenreDto,
+    @Param('genreId') genreId: string,
+  ) {
     return this.service.updateGenre(genre, genreId);
   }
 
@@ -99,7 +105,10 @@ export class LibraryController {
 
   @Get('suggestions/:authorId/:apiKey')
   @ApiOperation({ summary: 'get book suggestions for an author' })
-  async getSuggestions(@Param('authorId') authorId: string, @Param('apiKey') apiKey: string) {
+  async getSuggestions(
+    @Param('authorId') authorId: string,
+    @Param('apiKey') apiKey: string,
+  ) {
     return this.service.suggestBooks(authorId, apiKey);
   }
 
