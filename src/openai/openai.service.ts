@@ -30,7 +30,7 @@ export class OpenAIService {
     try {
       const completion: ChatCompletion = await openai.chat.completions.create({
         messages: messages,
-        model: 'gpt-4-turbo-preview',
+        model: 'gpt-5.2',
         max_tokens: 1000,
         temperature: 0.7,
       });
