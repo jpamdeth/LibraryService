@@ -8,7 +8,7 @@ import { ChatCompletion, ChatCompletionMessageParam } from 'openai/resources';
  */
 export class OpenAIService {
   private readonly logger = new Logger(OpenAIService.name);
-  private openai: OpenAI;
+  private openaiInstances = new Map<string, OpenAI>();
 
   /**
    * Retrieves suggestions from the OpenAI API.
@@ -20,19 +20,28 @@ export class OpenAIService {
     messages: ChatCompletionMessageParam[],
     apiKey: string,
   ): Promise<string> {
-    if (!this.openai) {
-      this.openai = new OpenAI({
-        apiKey: apiKey,
-      });
+    let openai = this.openaiInstances.get(apiKey);
+
+    if (!openai) {
+      openai = new OpenAI({ apiKey });
+      this.openaiInstances.set(apiKey, openai);
     }
 
-    const completion: ChatCompletion =
-      await this.openai.chat.completions.create({
+    try {
+      const completion: ChatCompletion = await openai.chat.completions.create({
         messages: messages,
         model: 'gpt-4-turbo-preview',
+        max_tokens: 1000,
+        temperature: 0.7,
       });
 
-    this.logger.debug(completion);
-    return completion.choices[0].message.content;
+      this.logger.debug(completion);
+      return (
+        completion.choices[0]?.message?.content || 'No suggestions available'
+      );
+    } catch (error) {
+      this.logger.error('OpenAI API error:', error);
+      throw new Error('Failed to get suggestions from OpenAI');
+    }
   }
 }

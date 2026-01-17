@@ -1,20 +1,32 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, Max, MaxLength } from 'class-validator';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class AuthorDto {
   @ApiPropertyOptional({
     description: 'Author ID',
     example: 'mvhgr30j5u3mnkk0a6tfct7o',
   })
+  @IsOptional()
+  @IsString()
   authorId?: string;
 
   @ApiPropertyOptional({
     description: 'Author first name',
     example: 'Jane',
   })
+  @IsOptional()
+  @IsString()
+  @MinLength(1, { message: 'First name cannot be empty' })
   @MaxLength(191, {
     message: 'First name is too long',
-  
   })
   firstName?: string;
 
@@ -22,6 +34,9 @@ export class AuthorDto {
     description: 'Author last name',
     example: 'Doe',
   })
+  @IsOptional()
+  @IsString()
+  @MinLength(1, { message: 'Last name cannot be empty' })
   @MaxLength(191, {
     message: 'Last name is too long',
   })
@@ -31,6 +46,8 @@ export class AuthorDto {
     description: 'Author biography',
     example: 'Jane Doe is a writer',
   })
+  @IsOptional()
+  @IsString()
   @MaxLength(2000, {
     message: 'Biography is too long',
   })
@@ -42,12 +59,16 @@ export class GenreDto {
     description: 'Genre ID',
     example: 'tso9ysj1ojgc4xlpblr5dc87',
   })
+  @IsOptional()
+  @IsString()
   genreId?: string;
 
   @ApiPropertyOptional({
     description: 'The genre name',
     example: 'Science Fiction',
   })
+  @IsNotEmpty({ message: 'Genre name is required' })
+  @IsString()
   @MaxLength(191, {
     message: 'Genre name is too long',
   })
@@ -59,12 +80,16 @@ export class BookDto {
     description: 'Book ID',
     example: 'tso9ysj1ojgc4xlpblr5dc87',
   })
+  @IsOptional()
+  @IsString()
   bookId?: string;
 
   @ApiPropertyOptional({
     description: 'The title of the book',
     example: 'The Hobbit',
   })
+  @IsNotEmpty({ message: 'Title is required' })
+  @IsString()
   @MaxLength(191, {
     message: 'Title is too long',
   })
@@ -74,6 +99,8 @@ export class BookDto {
     description: 'The description of the book',
     example: 'The Hobbit is a fantasy novel',
   })
+  @IsOptional()
+  @IsString()
   @MaxLength(2000, {
     message: 'Description is too long',
   })
@@ -83,12 +110,16 @@ export class BookDto {
     description: 'The author ID',
     example: 'mvhgr30j5u3mnkk0a6tfct7o',
   })
+  @IsNotEmpty({ message: 'Author ID is required' })
+  @IsString()
   authorId: string;
 
   @ApiPropertyOptional({
     description: 'The genre ID',
     example: 'tso9ysj1ojgc4xlpblr5dc87',
   })
+  @IsOptional()
+  @IsString()
   genreId?: string;
 
   @ApiPropertyOptional({
@@ -102,6 +133,8 @@ export class BookDto {
     description: 'The series the book belongs to',
     example: 'The Lord of the Rings',
   })
+  @IsOptional()
+  @IsString()
   @MaxLength(191, {
     message: 'Series is too long',
   })
@@ -111,12 +144,16 @@ export class BookDto {
     description: 'The series number',
     example: 1,
   })
+  @IsOptional()
+  @IsPositive({ message: 'Series number must be positive' })
   seriesNumber?: number;
 
   @ApiPropertyOptional({
     description: 'The edition of the book',
     example: 'First Edition',
   })
+  @IsOptional()
+  @IsString()
   @MaxLength(191, {
     message: 'Edition is too long',
   })

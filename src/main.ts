@@ -2,9 +2,20 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn', 'log'],
+  });
+
+  app.useGlobalFilters(new GlobalExceptionFilter());
+
+  // Set global timeout
+  app.use((req, res, next) => {
+    req.setTimeout(30000); // 30 seconds
+    next();
+  });
 
   const config = new DocumentBuilder()
     .setTitle('LibraryService')
