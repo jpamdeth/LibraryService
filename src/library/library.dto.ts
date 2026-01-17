@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
-  IsDateString,
   IsNotEmpty,
   IsOptional,
   IsPositive,
@@ -124,9 +124,16 @@ export class BookDto {
 
   @ApiPropertyOptional({
     description: 'The date the book was published',
-    example: '1937-09-21',
+    example: '1937-09-21T00:00:00.000Z',
   })
-  @IsDateString()
+  @Transform(({ value }) => {
+    if (value instanceof Date) return value;
+    // If it's just a date string like "1988-08-01", append time component
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return new Date(value + 'T00:00:00.000Z');
+    }
+    return new Date(value);
+  })
   published: Date;
 
   @ApiPropertyOptional({
