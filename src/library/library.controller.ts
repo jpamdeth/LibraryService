@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { LibraryService } from './library.service';
 import { ApiOperation } from '@nestjs/swagger';
-import { AuthorDto, BookDto, GenreDto } from './library.dto';
+import { AuthorDto, BookDto, GenreDto, SuggestionsDto } from './library.dto';
 
 @Controller('library')
 export class LibraryController {
@@ -103,21 +103,21 @@ export class LibraryController {
     return this.service.deleteBook(bookId);
   }
 
-  @Get('suggestions/:authorId/:apiKey')
+  @Post('suggestions/:authorId')
   @ApiOperation({ summary: 'get book suggestions for an author' })
   async getSuggestions(
     @Param('authorId') authorId: string,
-    @Param('apiKey') apiKey: string,
+    @Body() { apiKey }: SuggestionsDto,
   ) {
     return this.service.suggestBooks(authorId, apiKey);
   }
 
-  @Get('suggestions/:firstName/:lastName/:apiKey')
-  @ApiOperation({ summary: 'get book suggestions for an author' })
+  @Post('suggestions/:firstName/:lastName')
+  @ApiOperation({ summary: 'get book suggestions for an author by name' })
   async getSuggestionsByName(
     @Param('firstName') firstName: string,
     @Param('lastName') lastName: string,
-    @Param('apiKey') apiKey: string,
+    @Body() { apiKey }: SuggestionsDto,
   ) {
     return this.service.createAndSuggestBooks(firstName, lastName, apiKey);
   }

@@ -75,6 +75,16 @@ export class GenreDto {
   genre: string;
 }
 
+export class SuggestionsDto {
+  @ApiPropertyOptional({
+    description: 'OpenAI API key',
+    example: 'sk-...',
+  })
+  @IsNotEmpty({ message: 'API key is required' })
+  @IsString()
+  apiKey: string;
+}
+
 export class BookDto {
   @ApiPropertyOptional({
     description: 'Book ID',
