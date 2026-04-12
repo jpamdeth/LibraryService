@@ -35,7 +35,7 @@ export class OpenAIService {
         temperature: 0.7,
       });
 
-      this.logger.debug(completion);
+      this.logger.debug(`OpenAI usage: ${JSON.stringify(completion.usage)}`);
       return (
         completion.choices[0]?.message?.content || 'No suggestions available'
       );

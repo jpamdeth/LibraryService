@@ -53,7 +53,7 @@ describe('OpenAIService', () => {
     expect(result).toBe('Test suggestion');
     expect(mockCreate).toHaveBeenCalledWith({
       messages: [{ role: 'user', content: 'Test message' }],
-      model: 'gpt-5.2',
+      model: 'gpt-4o',
       max_tokens: 1000,
       temperature: 0.7,
     });

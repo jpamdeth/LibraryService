@@ -209,6 +209,10 @@ export class LibraryService {
       include: { books: true },
     });
 
+    if (!author) {
+      throw new Error(`Author not found: ${authorId}`);
+    }
+
     const messages: ChatCompletionMessageParam[] = [];
     messages.push({
       role: 'user',

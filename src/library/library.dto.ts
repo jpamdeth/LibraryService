@@ -1,4 +1,4 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
@@ -76,7 +76,7 @@ export class GenreDto {
 }
 
 export class SuggestionsDto {
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'OpenAI API key',
     example: 'sk-...',
   })
