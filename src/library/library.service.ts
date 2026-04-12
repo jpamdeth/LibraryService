@@ -223,30 +223,30 @@ export class LibraryService {
       throw new Error(`Author not found: ${authorId}`);
     }
 
-    const messages: ChatCompletionMessageParam[] = [];
-    messages.push({
-      role: 'user',
-      content: `If I have any books from author ${author.firstName} ${author.lastName} 
-      they are listed following.  Can you suggest some other titles?. 
-      Please use JSON format for the response.  This is the JSON format:    
-      title: string;
-      description?: string;
-      authorId: ${authorId};
-      published: Date;
-      series?: string;
-      seriesNumber?: number;
-      edition?: string;`,
-    });
+    return this.openai.getSuggestions(this.buildSuggestionPrompt(author), apiKey);
+  }
 
-    if (author.books) {
-      for (const book of author.books) {
-        messages.push({
-          role: 'user',
-          content: book.title,
-        });
-      }
+  private buildSuggestionPrompt(author: Author): ChatCompletionMessageParam[] {
+    const messages: ChatCompletionMessageParam[] = [
+      {
+        role: 'user',
+        content: `If I have any books from author ${author.firstName} ${author.lastName} \
+they are listed following.  Can you suggest some other titles?. \
+Please use JSON format for the response.  This is the JSON format:    \
+title: string; \
+description?: string; \
+authorId: ${author.id}; \
+published: Date; \
+series?: string; \
+seriesNumber?: number; \
+edition?: string;`,
+      },
+    ];
+
+    for (const book of author.books ?? []) {
+      messages.push({ role: 'user', content: book.title });
     }
 
-    return this.openai.getSuggestions(messages, apiKey);
+    return messages;
   }
 }
