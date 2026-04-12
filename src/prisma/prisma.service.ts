@@ -4,6 +4,7 @@ import {
   OnModuleInit,
   OnModuleDestroy,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 
@@ -14,8 +15,8 @@ export class PrismaService
 {
   private readonly logger = new Logger(PrismaService.name);
 
-  constructor() {
-    const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
+  constructor(config: ConfigService) {
+    const adapter = new PrismaMariaDb(config.getOrThrow<string>('DATABASE_URL'));
     super({ adapter });
   }
 
