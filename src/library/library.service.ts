@@ -26,6 +26,16 @@ export class LibraryService {
     return this.prisma.author.findMany();
   }
 
+  async getBooks(): Promise<Book[]> {
+    this.logger.debug('Getting all books');
+    return this.prisma.book.findMany();
+  }
+
+  async getGenres(): Promise<Genre[]> {
+    this.logger.debug('Getting all genres');
+    return this.prisma.genre.findMany();
+  }
+
   /**
    * Creates a new author in the library.
    * @param author - The author data to be created.

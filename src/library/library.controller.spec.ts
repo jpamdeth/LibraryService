@@ -24,6 +24,30 @@ describe('LibraryController', () => {
     sheetService = app.get(LibraryService);
   });
 
+  describe('getAuthors', () => {
+    it('should return all authors', async () => {
+      const authors = [{ id: '1', firstName: 'John' }];
+      sheetService.getAuthors = jest.fn().mockResolvedValue(authors);
+      expect(await sheetController.getAuthors()).toBe(authors);
+    });
+  });
+
+  describe('getBooks', () => {
+    it('should return all books', async () => {
+      const books = [{ id: '1', title: 'The Hobbit', authorId: '1', published: new Date() }];
+      sheetService.getBooks = jest.fn().mockResolvedValue(books);
+      expect(await sheetController.getBooks()).toBe(books);
+    });
+  });
+
+  describe('getGenres', () => {
+    it('should return all genres', async () => {
+      const genres = [{ id: '1', genre: 'Fantasy' }];
+      sheetService.getGenres = jest.fn().mockResolvedValue(genres);
+      expect(await sheetController.getGenres()).toBe(genres);
+    });
+  });
+
   describe('getAuthor', () => {
     it('should return an author', async () => {
       const authorId = '1';

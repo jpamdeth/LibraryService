@@ -39,6 +39,30 @@ describe('LibraryService', () => {
     expect(service).toBeDefined();
   });
 
+  it('should get all authors', async () => {
+    const authors = [{ id: '1', firstName: 'Jane', lastName: 'Doe' }];
+    prismaService.author.findMany = jest.fn().mockResolvedValue(authors);
+    const result = await service.getAuthors();
+    expect(prismaService.author.findMany).toHaveBeenCalled();
+    expect(result).toEqual(authors);
+  });
+
+  it('should get all books', async () => {
+    const books = [{ id: '1', title: 'The Hobbit', authorId: '1', published: new Date() }];
+    prismaService.book.findMany = jest.fn().mockResolvedValue(books);
+    const result = await service.getBooks();
+    expect(prismaService.book.findMany).toHaveBeenCalled();
+    expect(result).toEqual(books);
+  });
+
+  it('should get all genres', async () => {
+    const genres = [{ id: '1', genre: 'Fantasy' }];
+    prismaService.genre.findMany = jest.fn().mockResolvedValue(genres);
+    const result = await service.getGenres();
+    expect(prismaService.genre.findMany).toHaveBeenCalled();
+    expect(result).toEqual(genres);
+  });
+
   it('should create an author', async () => {
     const author: AuthorDto = {
       firstName: 'Jane',

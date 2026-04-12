@@ -50,6 +50,12 @@ export class LibraryController {
     return this.service.deleteAuthor(authorId);
   }
 
+  @Get('genres')
+  @ApiOperation({ summary: 'get all genres' })
+  async getGenres() {
+    return this.service.getGenres();
+  }
+
   @Get('genres/:genreId')
   @ApiOperation({ summary: 'get a genre' })
   async getGenre(@Param('genreId') genreId: string) {
@@ -76,6 +82,12 @@ export class LibraryController {
   @ApiOperation({ summary: 'delete a genre' })
   async deleteGenre(@Param('genreId') genreId: string) {
     return this.service.deleteGenre(genreId);
+  }
+
+  @Get('books')
+  @ApiOperation({ summary: 'get all books' })
+  async getBooks() {
+    return this.service.getBooks();
   }
 
   @Get('books/:bookId')
