@@ -24,9 +24,12 @@
     "migrate:deploy": "npx prisma migrate deploy",
     "prisma:generate": "npx prisma generate",
     "prisma:studio": "npx prisma studio",
-    "prisma:seed": "npx prisma db seed"
+    "prisma:seed": "npx prisma db seed",
+    "agent": "ts-node -r tsconfig-paths/register agent/index.ts",
+    "agent:apply": "ts-node -r tsconfig-paths/register agent/index.ts --apply"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.88.0",
     "@nestjs/common": "^11.1.12",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.12",
