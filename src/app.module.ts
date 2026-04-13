@@ -6,7 +6,6 @@ import { validate } from './config/env.validation';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 
-// Local development version - No AWS services
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,9 +19,6 @@ import { APP_GUARD } from '@nestjs/core';
       },
     ]),
     LibraryModule,
-    // AWS services commented out for local development
-    // PSConfigModule.register({...}),
-    // CognitoAuthModule.registerAsync({...}),
   ],
   controllers: [AppController],
   providers: [
