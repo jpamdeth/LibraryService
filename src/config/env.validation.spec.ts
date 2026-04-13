@@ -31,4 +31,10 @@ describe('env validate()', () => {
     expect(result.NODE_ENV).toBe('production');
     expect(result.PORT).toBe('8080');
   });
+
+  it('throws when PORT is not a numeric string', () => {
+    expect(() =>
+      validate({ DATABASE_URL: 'mysql://localhost/test', PORT: 'banana' }),
+    ).toThrow();
+  });
 });

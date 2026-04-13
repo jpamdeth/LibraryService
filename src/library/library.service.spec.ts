@@ -199,6 +199,27 @@ describe('LibraryService', () => {
     expect(result).toEqual(book);
   });
 
+  it('should throw NotFoundException when getAuthor is called with an unknown id', async () => {
+    prismaService.author.findUnique.mockResolvedValue(null);
+    await expect(service.getAuthor('unknown-id')).rejects.toThrow(
+      NotFoundException,
+    );
+  });
+
+  it('should throw NotFoundException when getGenre is called with an unknown id', async () => {
+    prismaService.genre.findUnique.mockResolvedValue(null);
+    await expect(service.getGenre('unknown-id')).rejects.toThrow(
+      NotFoundException,
+    );
+  });
+
+  it('should throw NotFoundException when getBook is called with an unknown id', async () => {
+    prismaService.book.findUnique.mockResolvedValue(null);
+    await expect(service.getBook('unknown-id')).rejects.toThrow(
+      NotFoundException,
+    );
+  });
+
   it('should delete an author', async () => {
     await service.deleteAuthor('test');
     expect(prismaService.author.delete).toHaveBeenCalledWith({

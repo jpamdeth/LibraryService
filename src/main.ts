@@ -39,7 +39,7 @@ async function bootstrap() {
         return new BadRequestException(result);
       },
       stopAtFirstError: false,
-      skipMissingProperties: true,
+      skipMissingProperties: false,
     }),
   );
   await app.listen(process.env.PORT ?? 3000);

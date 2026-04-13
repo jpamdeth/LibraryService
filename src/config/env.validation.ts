@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { IsString, IsOptional, validateSync } from 'class-validator';
+import { IsString, IsOptional, IsNumberString, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
   @IsString()
@@ -10,7 +10,7 @@ class EnvironmentVariables {
   NODE_ENV: string = 'development';
 
   @IsOptional()
-  @IsString()
+  @IsNumberString({}, { message: 'PORT must be a numeric string' })
   PORT: string = '3000';
 }
 

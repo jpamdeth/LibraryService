@@ -128,7 +128,7 @@ export class LibraryService {
    */
   async getAuthor(authorId: string): Promise<Author> {
     this.logger.debug('Getting author ' + authorId);
-    return this.prisma.author.findUnique({
+    const author = await this.prisma.author.findUnique({
       where: { id: authorId },
       include: {
         books: {
@@ -138,6 +138,8 @@ export class LibraryService {
         },
       },
     });
+    if (!author) throw new NotFoundException(`Author not found: ${authorId}`);
+    return author;
   }
 
   /**
@@ -147,9 +149,11 @@ export class LibraryService {
    */
   async getGenre(genreId: string): Promise<Genre> {
     this.logger.debug('Getting genre ' + genreId);
-    return this.prisma.genre.findUnique({
+    const genre = await this.prisma.genre.findUnique({
       where: { id: genreId },
     });
+    if (!genre) throw new NotFoundException(`Genre not found: ${genreId}`);
+    return genre;
   }
 
   /**
@@ -159,9 +163,11 @@ export class LibraryService {
    */
   async getBook(bookId: string): Promise<Book> {
     this.logger.debug('Getting book ' + bookId);
-    return this.prisma.book.findUnique({
+    const book = await this.prisma.book.findUnique({
       where: { id: bookId },
     });
+    if (!book) throw new NotFoundException(`Book not found: ${bookId}`);
+    return book;
   }
 
   /**
