@@ -42,7 +42,8 @@ describe('LibraryService', () => {
 
   it('should get all authors', async () => {
     const authors = [{ id: '1', firstName: 'Jane', lastName: 'Doe' }];
-    prismaService.author.findMany = jest.fn().mockResolvedValue(authors);
+    // @ts-ignore TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
+    (prismaService.author.findMany as any).mockResolvedValue(authors);
     const result = await service.getAuthors();
     expect(prismaService.author.findMany).toHaveBeenCalled();
     expect(result).toEqual(authors);
@@ -52,7 +53,8 @@ describe('LibraryService', () => {
     const books = [
       { id: '1', title: 'The Hobbit', authorId: '1', published: new Date() },
     ];
-    prismaService.book.findMany = jest.fn().mockResolvedValue(books);
+    // @ts-ignore TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
+    (prismaService.book.findMany as any).mockResolvedValue(books);
     const result = await service.getBooks();
     expect(prismaService.book.findMany).toHaveBeenCalled();
     expect(result).toEqual(books);
@@ -60,7 +62,8 @@ describe('LibraryService', () => {
 
   it('should get all genres', async () => {
     const genres = [{ id: '1', genre: 'Fantasy' }];
-    prismaService.genre.findMany = jest.fn().mockResolvedValue(genres);
+    // @ts-ignore TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
+    (prismaService.genre.findMany as any).mockResolvedValue(genres);
     const result = await service.getGenres();
     expect(prismaService.genre.findMany).toHaveBeenCalled();
     expect(result).toEqual(genres);
@@ -71,7 +74,7 @@ describe('LibraryService', () => {
       firstName: 'Jane',
       lastName: 'Doe',
     };
-    prismaService.author.create = jest.fn().mockResolvedValue(author);
+    prismaService.author.create.mockResolvedValue(author as any);
     const result = await service.createAuthor(author);
     expect(prismaService.author.create).toHaveBeenCalledWith({ data: author });
     expect(result).toEqual(author);
@@ -83,7 +86,7 @@ describe('LibraryService', () => {
       firstName: 'Jane',
       lastName: 'Doe',
     };
-    prismaService.author.update = jest.fn().mockResolvedValue(author);
+    prismaService.author.update.mockResolvedValue(author as any);
     const result = await service.updateAuthor(author, author.authorId);
     expect(prismaService.author.update).toHaveBeenCalledWith({
       where: { id: author.authorId },
@@ -96,7 +99,7 @@ describe('LibraryService', () => {
     const genre: GenreDto = {
       genre: 'Science Fiction',
     };
-    prismaService.genre.create = jest.fn().mockResolvedValue(genre);
+    prismaService.genre.create.mockResolvedValue(genre as any);
     const result = await service.createGenre(genre);
     expect(prismaService.genre.create).toHaveBeenCalledWith({ data: genre });
     expect(result).toEqual(genre);
@@ -107,7 +110,7 @@ describe('LibraryService', () => {
       genreId: 'mvhgr30j5u3mnkk0a6tfct7o',
       genre: 'Science Fiction',
     };
-    prismaService.genre.update = jest.fn().mockResolvedValue(genre);
+    prismaService.genre.update.mockResolvedValue(genre as any);
     const result = await service.updateGenre(genre, genre.genreId);
     expect(prismaService.genre.update).toHaveBeenCalledWith({
       where: { id: genre.genreId },
@@ -122,7 +125,7 @@ describe('LibraryService', () => {
       authorId: 'mvhgr30j5u3mnkk0a6tfct7o',
       published: new Date(),
     };
-    prismaService.book.create = jest.fn().mockResolvedValue(book);
+    prismaService.book.create.mockResolvedValue(book as any);
     const result = await service.createBook(book);
     expect(prismaService.book.create).toHaveBeenCalledWith({ data: book });
     expect(result).toEqual(book);
@@ -135,7 +138,7 @@ describe('LibraryService', () => {
       authorId: 'mvhgr30j5u3mnkk0a6tfct7o',
       published: new Date(),
     };
-    prismaService.book.update = jest.fn().mockResolvedValue(book);
+    prismaService.book.update.mockResolvedValue(book as any);
     const result = await service.updateBook(book, book.bookId);
     expect(prismaService.book.update).toHaveBeenCalledWith({
       where: { id: book.bookId },
@@ -150,7 +153,7 @@ describe('LibraryService', () => {
       firstName: 'Jane',
       lastName: 'Doe',
     };
-    prismaService.author.findUnique = jest.fn().mockResolvedValue(author);
+    prismaService.author.findUnique.mockResolvedValue(author as any);
     const result = await service.getAuthor(author.id);
     expect(prismaService.author.findUnique).toHaveBeenCalledWith({
       where: { id: author.id },
@@ -170,7 +173,7 @@ describe('LibraryService', () => {
       id: 'mvhgr30j5u3mnkk0a6tfct7o',
       genre: 'Science Fiction',
     };
-    prismaService.genre.findUnique = jest.fn().mockResolvedValue(genre);
+    prismaService.genre.findUnique.mockResolvedValue(genre);
     const result = await service.getGenre(genre.id);
     expect(prismaService.genre.findUnique).toHaveBeenCalledWith({
       where: { id: genre.id },
@@ -185,7 +188,7 @@ describe('LibraryService', () => {
       authorId: 'mvhgr30j5u3mnkk0a6tfct7o',
       published: new Date(),
     };
-    prismaService.book.findUnique = jest.fn().mockResolvedValue(book);
+    prismaService.book.findUnique.mockResolvedValue(book as any);
     const result = await service.getBook(book.id);
     expect(prismaService.book.findUnique).toHaveBeenCalledWith({
       where: { id: book.id },
@@ -194,7 +197,6 @@ describe('LibraryService', () => {
   });
 
   it('should delete an author', async () => {
-    prismaService.author.delete = jest.fn();
     await service.deleteAuthor('test');
     expect(prismaService.author.delete).toHaveBeenCalledWith({
       where: { id: 'test' },
@@ -202,7 +204,6 @@ describe('LibraryService', () => {
   });
 
   it('should delete a genre', async () => {
-    prismaService.genre.delete = jest.fn();
     await service.deleteGenre('test');
     expect(prismaService.genre.delete).toHaveBeenCalledWith({
       where: { id: 'test' },
@@ -210,7 +211,6 @@ describe('LibraryService', () => {
   });
 
   it('should delete a book', async () => {
-    prismaService.book.delete = jest.fn();
     await service.deleteBook('test');
     expect(prismaService.book.delete).toHaveBeenCalledWith({
       where: { id: 'test' },
@@ -231,17 +231,16 @@ describe('LibraryService', () => {
         },
       ],
     };
-    prismaService.author.findUnique = jest.fn().mockResolvedValue(author);
-    openaiService.getSuggestions = jest.fn().mockResolvedValue('suggestions');
+    prismaService.author.findUnique.mockResolvedValue(author as any);
+    openaiService.getSuggestions.mockResolvedValue('suggestions');
     const result = await service.suggestBooks(author.id, 'testapikey');
     expect(result).toBe('suggestions');
-    const messages = (openaiService.getSuggestions as jest.Mock).mock
-      .calls[0][0];
+    const messages = openaiService.getSuggestions.mock.calls[0][0];
     expect(messages.some((m) => m.content === 'Book One')).toBe(true);
   });
 
   it('should throw NotFoundException when suggestBooks is called with an unknown authorId', async () => {
-    prismaService.author.findUnique = jest.fn().mockResolvedValue(null);
+    prismaService.author.findUnique.mockResolvedValue(null);
     await expect(
       service.suggestBooks('unknown-id', 'testapikey'),
     ).rejects.toThrow(NotFoundException);
@@ -253,11 +252,9 @@ describe('LibraryService', () => {
       firstName: 'Jane',
       lastName: 'Doe',
     };
-    prismaService.author.create = jest.fn().mockResolvedValue(author);
-    prismaService.author.findUnique = jest.fn().mockResolvedValue(author);
-    openaiService.getSuggestions = jest
-      .fn()
-      .mockResolvedValue('your suggestions');
+    prismaService.author.create.mockResolvedValue(author as any);
+    prismaService.author.findUnique.mockResolvedValue(author as any);
+    openaiService.getSuggestions.mockResolvedValue('your suggestions');
     const result = await service.createAndSuggestBooks(
       author.firstName,
       author.lastName,
