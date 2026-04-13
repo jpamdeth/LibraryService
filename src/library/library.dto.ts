@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
+  IsDate,
   IsNotEmpty,
   IsOptional,
   IsPositive,
@@ -132,7 +133,7 @@ export class BookDto {
   @IsString()
   genreId?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'The date the book was published',
     example: '1937-09-21T00:00:00.000Z',
   })
@@ -144,6 +145,7 @@ export class BookDto {
     }
     return new Date(value);
   })
+  @IsDate({ message: 'published must be a valid date' })
   published: Date;
 
   @ApiPropertyOptional({
