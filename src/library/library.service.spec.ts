@@ -214,6 +214,28 @@ describe('LibraryService', () => {
     });
   });
 
+  it('should suggest books for an existing author', async () => {
+    const author: Author = {
+      id: 'mvhgr30j5u3mnkk0a6tfct7o',
+      firstName: 'Jane',
+      lastName: 'Doe',
+      books: [{ id: 'b1', title: 'Book One', authorId: 'mvhgr30j5u3mnkk0a6tfct7o', published: new Date() }],
+    };
+    prismaService.author.findUnique = jest.fn().mockResolvedValue(author);
+    openaiService.getSuggestions = jest.fn().mockResolvedValue('suggestions');
+    const result = await service.suggestBooks(author.id, 'testapikey');
+    expect(result).toBe('suggestions');
+    const messages = (openaiService.getSuggestions as jest.Mock).mock.calls[0][0];
+    expect(messages.some((m) => m.content === 'Book One')).toBe(true);
+  });
+
+  it('should throw when suggestBooks is called with an unknown authorId', async () => {
+    prismaService.author.findUnique = jest.fn().mockResolvedValue(null);
+    await expect(service.suggestBooks('unknown-id', 'testapikey')).rejects.toThrow(
+      'Author not found: unknown-id',
+    );
+  });
+
   it('should create and suggest books', async () => {
     const author: Author = {
       id: 'mvhgr30j5u3mnkk0a6tfct7o',

@@ -156,6 +156,22 @@ describe('LibraryController', () => {
     });
   });
 
+  describe('getSuggestions', () => {
+    it('should return suggestions for an author', async () => {
+      sheetService.suggestBooks = jest.fn().mockResolvedValue('suggestions');
+      expect(await sheetController.getSuggestions('1', { apiKey: 'key' })).toBe('suggestions');
+      expect(sheetService.suggestBooks).toHaveBeenCalledWith('1', 'key');
+    });
+  });
+
+  describe('getSuggestionsByName', () => {
+    it('should return suggestions for an author by name', async () => {
+      sheetService.createAndSuggestBooks = jest.fn().mockResolvedValue('suggestions');
+      expect(await sheetController.getSuggestionsByName('Jane', 'Doe', { apiKey: 'key' })).toBe('suggestions');
+      expect(sheetService.createAndSuggestBooks).toHaveBeenCalledWith('Jane', 'Doe', 'key');
+    });
+  });
+
   describe('deleteBook', () => {
     it('should delete a book', async () => {
       const bookId = '1';
