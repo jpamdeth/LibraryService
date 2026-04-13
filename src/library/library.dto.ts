@@ -64,7 +64,7 @@ export class GenreDto {
   @IsString()
   genreId?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'The genre name',
     example: 'Science Fiction',
   })
@@ -95,7 +95,7 @@ export class BookDto {
   @IsString()
   bookId?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'The title of the book',
     example: 'The Hobbit',
   })
@@ -117,7 +117,7 @@ export class BookDto {
   })
   description?: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'The author ID',
     example: 'mvhgr30j5u3mnkk0a6tfct7o',
   })

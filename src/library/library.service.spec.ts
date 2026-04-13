@@ -88,9 +88,10 @@ describe('LibraryService', () => {
     };
     prismaService.author.update.mockResolvedValue(author as any);
     const result = await service.updateAuthor(author, author.authorId);
+    const { authorId: _id, ...data } = author;
     expect(prismaService.author.update).toHaveBeenCalledWith({
       where: { id: author.authorId },
-      data: author,
+      data,
     });
     expect(result).toEqual(author);
   });
@@ -112,9 +113,10 @@ describe('LibraryService', () => {
     };
     prismaService.genre.update.mockResolvedValue(genre as any);
     const result = await service.updateGenre(genre, genre.genreId);
+    const { genreId: _id, ...data } = genre;
     expect(prismaService.genre.update).toHaveBeenCalledWith({
       where: { id: genre.genreId },
-      data: genre,
+      data,
     });
     expect(result).toEqual(genre);
   });
@@ -140,9 +142,10 @@ describe('LibraryService', () => {
     };
     prismaService.book.update.mockResolvedValue(book as any);
     const result = await service.updateBook(book, book.bookId);
+    const { bookId: _id, ...data } = book;
     expect(prismaService.book.update).toHaveBeenCalledWith({
       where: { id: book.bookId },
-      data: book,
+      data,
     });
     expect(result).toEqual(book);
   });

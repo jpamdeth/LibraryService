@@ -64,9 +64,10 @@ export class LibraryService {
    */
   async updateAuthor(author: AuthorDto, authorId: string): Promise<Author> {
     this.logger.debug('Updating author ' + authorId);
+    const { authorId: _id, ...data } = author;
     return this.prisma.author.update({
       where: { id: authorId },
-      data: author,
+      data,
     });
   }
 
@@ -88,9 +89,10 @@ export class LibraryService {
    */
   async updateGenre(genre: GenreDto, genreId: string): Promise<Genre> {
     this.logger.debug('Updating genre ' + genreId);
+    const { genreId: _id, ...data } = genre;
     return this.prisma.genre.update({
       where: { id: genreId },
-      data: genre,
+      data,
     });
   }
 
@@ -112,9 +114,10 @@ export class LibraryService {
    */
   async updateBook(book: BookDto, bookId: string): Promise<Book> {
     this.logger.debug('Updating book ' + bookId);
+    const { bookId: _id, ...data } = book;
     return this.prisma.book.update({
       where: { id: bookId },
-      data: book,
+      data,
     });
   }
 
