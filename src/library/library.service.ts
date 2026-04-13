@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { OpenAIService } from '../openai/openai.service';
 import { ChatCompletionMessageParam } from 'openai/resources';
@@ -220,7 +220,7 @@ export class LibraryService {
     });
 
     if (!author) {
-      throw new Error(`Author not found: ${authorId}`);
+      throw new NotFoundException(`Author not found: ${authorId}`);
     }
 
     return this.openai.getSuggestions(this.buildSuggestionPrompt(author), apiKey);

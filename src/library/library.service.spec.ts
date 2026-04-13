@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 import { LibraryService } from './library.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
@@ -229,10 +230,10 @@ describe('LibraryService', () => {
     expect(messages.some((m) => m.content === 'Book One')).toBe(true);
   });
 
-  it('should throw when suggestBooks is called with an unknown authorId', async () => {
+  it('should throw NotFoundException when suggestBooks is called with an unknown authorId', async () => {
     prismaService.author.findUnique = jest.fn().mockResolvedValue(null);
     await expect(service.suggestBooks('unknown-id', 'testapikey')).rejects.toThrow(
-      'Author not found: unknown-id',
+      NotFoundException,
     );
   });
 
