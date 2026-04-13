@@ -36,7 +36,9 @@ export class OpenAIService {
       );
     } catch (error) {
       this.logger.error('OpenAI API error:', error);
-      throw new Error('Failed to get suggestions from OpenAI');
+      throw new Error('Failed to get suggestions from OpenAI', {
+        cause: error,
+      });
     }
   }
 }

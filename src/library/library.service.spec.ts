@@ -42,7 +42,7 @@ describe('LibraryService', () => {
 
   it('should get all authors', async () => {
     const authors = [{ id: '1', firstName: 'Jane', lastName: 'Doe' }];
-    // @ts-ignore TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
+    // @ts-expect-error TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
     (prismaService.author.findMany as any).mockResolvedValue(authors);
     const result = await service.getAuthors();
     expect(prismaService.author.findMany).toHaveBeenCalled();
@@ -53,7 +53,7 @@ describe('LibraryService', () => {
     const books = [
       { id: '1', title: 'The Hobbit', authorId: '1', published: new Date() },
     ];
-    // @ts-ignore TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
+    // @ts-expect-error TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
     (prismaService.book.findMany as any).mockResolvedValue(books);
     const result = await service.getBooks();
     expect(prismaService.book.findMany).toHaveBeenCalled();
@@ -62,7 +62,7 @@ describe('LibraryService', () => {
 
   it('should get all genres', async () => {
     const genres = [{ id: '1', genre: 'Fantasy' }];
-    // @ts-ignore TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
+    // @ts-expect-error TS2615: Prisma v7 circular aggregate types confuse DeepMocked type elaboration
     (prismaService.genre.findMany as any).mockResolvedValue(genres);
     const result = await service.getGenres();
     expect(prismaService.genre.findMany).toHaveBeenCalled();
