@@ -16,7 +16,9 @@ export class PrismaService
   private readonly logger = new Logger(PrismaService.name);
 
   constructor(config: ConfigService) {
-    const adapter = new PrismaMariaDb(config.getOrThrow<string>('DATABASE_URL'));
+    const adapter = new PrismaMariaDb(
+      config.getOrThrow<string>('DATABASE_URL'),
+    );
     super({ adapter });
   }
 

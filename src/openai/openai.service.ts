@@ -31,7 +31,9 @@ export class OpenAIService {
       });
 
       this.logger.debug(`OpenAI usage: ${JSON.stringify(completion.usage)}`);
-      return completion.choices[0]?.message?.content || 'No suggestions available';
+      return (
+        completion.choices[0]?.message?.content || 'No suggestions available'
+      );
     } catch (error) {
       this.logger.error('OpenAI API error:', error);
       throw new Error('Failed to get suggestions from OpenAI');

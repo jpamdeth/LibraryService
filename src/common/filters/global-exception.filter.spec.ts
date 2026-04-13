@@ -56,7 +56,10 @@ describe('GlobalExceptionFilter', () => {
 
   it('includes a timestamp in the response', () => {
     const { host, json } = makeHost();
-    filter.catch(new HttpException('Bad request', HttpStatus.BAD_REQUEST), host);
+    filter.catch(
+      new HttpException('Bad request', HttpStatus.BAD_REQUEST),
+      host,
+    );
     const call = json.mock.calls[0][0];
     expect(call.timestamp).toBeDefined();
     expect(new Date(call.timestamp).getTime()).not.toBeNaN();

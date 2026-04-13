@@ -49,7 +49,9 @@ describe('LibraryService', () => {
   });
 
   it('should get all books', async () => {
-    const books = [{ id: '1', title: 'The Hobbit', authorId: '1', published: new Date() }];
+    const books = [
+      { id: '1', title: 'The Hobbit', authorId: '1', published: new Date() },
+    ];
     prismaService.book.findMany = jest.fn().mockResolvedValue(books);
     const result = await service.getBooks();
     expect(prismaService.book.findMany).toHaveBeenCalled();
@@ -220,21 +222,29 @@ describe('LibraryService', () => {
       id: 'mvhgr30j5u3mnkk0a6tfct7o',
       firstName: 'Jane',
       lastName: 'Doe',
-      books: [{ id: 'b1', title: 'Book One', authorId: 'mvhgr30j5u3mnkk0a6tfct7o', published: new Date() }],
+      books: [
+        {
+          id: 'b1',
+          title: 'Book One',
+          authorId: 'mvhgr30j5u3mnkk0a6tfct7o',
+          published: new Date(),
+        },
+      ],
     };
     prismaService.author.findUnique = jest.fn().mockResolvedValue(author);
     openaiService.getSuggestions = jest.fn().mockResolvedValue('suggestions');
     const result = await service.suggestBooks(author.id, 'testapikey');
     expect(result).toBe('suggestions');
-    const messages = (openaiService.getSuggestions as jest.Mock).mock.calls[0][0];
+    const messages = (openaiService.getSuggestions as jest.Mock).mock
+      .calls[0][0];
     expect(messages.some((m) => m.content === 'Book One')).toBe(true);
   });
 
   it('should throw NotFoundException when suggestBooks is called with an unknown authorId', async () => {
     prismaService.author.findUnique = jest.fn().mockResolvedValue(null);
-    await expect(service.suggestBooks('unknown-id', 'testapikey')).rejects.toThrow(
-      NotFoundException,
-    );
+    await expect(
+      service.suggestBooks('unknown-id', 'testapikey'),
+    ).rejects.toThrow(NotFoundException);
   });
 
   it('should create and suggest books', async () => {

@@ -34,7 +34,9 @@ describe('LibraryController', () => {
 
   describe('getBooks', () => {
     it('should return all books', async () => {
-      const books = [{ id: '1', title: 'The Hobbit', authorId: '1', published: new Date() }];
+      const books = [
+        { id: '1', title: 'The Hobbit', authorId: '1', published: new Date() },
+      ];
       sheetService.getBooks = jest.fn().mockResolvedValue(books);
       expect(await sheetController.getBooks()).toBe(books);
     });
@@ -159,16 +161,28 @@ describe('LibraryController', () => {
   describe('getSuggestions', () => {
     it('should return suggestions for an author', async () => {
       sheetService.suggestBooks = jest.fn().mockResolvedValue('suggestions');
-      expect(await sheetController.getSuggestions('1', { apiKey: 'key' })).toBe('suggestions');
+      expect(await sheetController.getSuggestions('1', { apiKey: 'key' })).toBe(
+        'suggestions',
+      );
       expect(sheetService.suggestBooks).toHaveBeenCalledWith('1', 'key');
     });
   });
 
   describe('getSuggestionsByName', () => {
     it('should return suggestions for an author by name', async () => {
-      sheetService.createAndSuggestBooks = jest.fn().mockResolvedValue('suggestions');
-      expect(await sheetController.getSuggestionsByName('Jane', 'Doe', { apiKey: 'key' })).toBe('suggestions');
-      expect(sheetService.createAndSuggestBooks).toHaveBeenCalledWith('Jane', 'Doe', 'key');
+      sheetService.createAndSuggestBooks = jest
+        .fn()
+        .mockResolvedValue('suggestions');
+      expect(
+        await sheetController.getSuggestionsByName('Jane', 'Doe', {
+          apiKey: 'key',
+        }),
+      ).toBe('suggestions');
+      expect(sheetService.createAndSuggestBooks).toHaveBeenCalledWith(
+        'Jane',
+        'Doe',
+        'key',
+      );
     });
   });
 

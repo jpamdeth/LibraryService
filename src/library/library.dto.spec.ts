@@ -16,7 +16,10 @@ describe('BookDto published transform', () => {
   });
 
   it('converts a date-only string to midnight UTC', () => {
-    const dto = plainToInstance(BookDto, { ...validBase(), published: '1988-08-01' });
+    const dto = plainToInstance(BookDto, {
+      ...validBase(),
+      published: '1988-08-01',
+    });
     expect(dto.published).toBeInstanceOf(Date);
     expect(dto.published.toISOString()).toBe('1988-08-01T00:00:00.000Z');
   });

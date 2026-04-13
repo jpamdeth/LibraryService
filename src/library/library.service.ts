@@ -26,11 +26,19 @@ export class LibraryService {
     return this.prisma.author.findMany();
   }
 
+  /**
+   * Retrieves all books from the library.
+   * @returns A promise that resolves to an array of books.
+   */
   async getBooks(): Promise<Book[]> {
     this.logger.debug('Getting all books');
     return this.prisma.book.findMany();
   }
 
+  /**
+   * Retrieves all genres from the library.
+   * @returns A promise that resolves to an array of genres.
+   */
   async getGenres(): Promise<Genre[]> {
     this.logger.debug('Getting all genres');
     return this.prisma.genre.findMany();
@@ -223,7 +231,10 @@ export class LibraryService {
       throw new NotFoundException(`Author not found: ${authorId}`);
     }
 
-    return this.openai.getSuggestions(this.buildSuggestionPrompt(author), apiKey);
+    return this.openai.getSuggestions(
+      this.buildSuggestionPrompt(author),
+      apiKey,
+    );
   }
 
   private buildSuggestionPrompt(author: Author): ChatCompletionMessageParam[] {
