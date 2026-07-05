@@ -14,8 +14,15 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "up and running!"', () => {
-      expect(appController.getHealth()).toBe('up and running!');
+    it('should return structured health status', () => {
+      const result = appController.getHealth();
+
+      expect(result).toMatchObject({
+        service: 'LibraryService',
+        status: 'ok',
+        version: '1.0',
+      });
+      expect(new Date(result.timestamp).toString()).not.toBe('Invalid Date');
     });
   });
 });

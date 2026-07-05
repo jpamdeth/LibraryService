@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { OpenAI } from 'openai';
 import { ChatCompletion, ChatCompletionMessageParam } from 'openai/resources';
+import { createHash } from 'crypto';
 
 const GPT_MODEL = 'gpt-4o';
 const MAX_TOKENS = 1000;
@@ -11,23 +13,36 @@ export class OpenAIService {
   private readonly logger = new Logger(OpenAIService.name);
   private openaiInstances = new Map<string, OpenAI>();
 
+  constructor(private readonly configService: ConfigService) {}
+
   async getSuggestions(
     messages: ChatCompletionMessageParam[],
     apiKey: string,
   ): Promise<string> {
-    let openai = this.openaiInstances.get(apiKey);
+    const cacheKey = this.hashApiKey(apiKey);
+    let openai = this.openaiInstances.get(cacheKey);
 
     if (!openai) {
       openai = new OpenAI({ apiKey });
-      this.openaiInstances.set(apiKey, openai);
+      this.openaiInstances.set(cacheKey, openai);
     }
 
     try {
       const completion: ChatCompletion = await openai.chat.completions.create({
         messages,
-        model: GPT_MODEL,
-        max_tokens: MAX_TOKENS,
-        temperature: TEMPERATURE,
+        model: this.configService.get<string>('OPENAI_MODEL', GPT_MODEL),
+        max_tokens: Number(
+          this.configService.get<string | number>(
+            'OPENAI_MAX_TOKENS',
+            MAX_TOKENS,
+          ),
+        ),
+        temperature: Number(
+          this.configService.get<string | number>(
+            'OPENAI_TEMPERATURE',
+            TEMPERATURE,
+          ),
+        ),
       });
 
       this.logger.debug(`OpenAI usage: ${JSON.stringify(completion.usage)}`);
@@ -40,5 +55,9 @@ export class OpenAIService {
         cause: error,
       });
     }
+  }
+
+  private hashApiKey(apiKey: string): string {
+    return createHash('sha256').update(apiKey).digest('hex');
   }
 }

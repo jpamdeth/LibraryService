@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { BadRequestException } from '@nestjs/common';
 import { LibraryController } from './library.controller';
 import { LibraryService } from './library.service';
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
@@ -168,6 +169,26 @@ describe('LibraryController', () => {
       );
       expect(sheetService.suggestBooks).toHaveBeenCalledWith('1', 'key');
     });
+
+    it('should prefer API keys supplied through the header', async () => {
+      sheetService.suggestBooks.mockResolvedValue('suggestions');
+
+      expect(
+        await sheetController.getSuggestions(
+          '1',
+          { apiKey: 'body-key' },
+          'header-key',
+        ),
+      ).toBe('suggestions');
+
+      expect(sheetService.suggestBooks).toHaveBeenCalledWith('1', 'header-key');
+    });
+
+    it('should reject suggestion requests without an API key', async () => {
+      await expect(sheetController.getSuggestions('1', {})).rejects.toThrow(
+        BadRequestException,
+      );
+    });
   });
 
   describe('getSuggestionsByName', () => {
@@ -182,6 +203,23 @@ describe('LibraryController', () => {
         'Jane',
         'Doe',
         'key',
+      );
+    });
+
+    it('should accept API keys supplied through the header', async () => {
+      sheetService.createAndSuggestBooks.mockResolvedValue('suggestions');
+
+      await sheetController.getSuggestionsByName(
+        'Jane',
+        'Doe',
+        {},
+        'header-key',
+      );
+
+      expect(sheetService.createAndSuggestBooks).toHaveBeenCalledWith(
+        'Jane',
+        'Doe',
+        'header-key',
       );
     });
   });

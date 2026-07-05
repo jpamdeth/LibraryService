@@ -22,6 +22,13 @@ describe('env validate()', () => {
     expect(result.PORT).toBe('3000');
   });
 
+  it('defaults OpenAI request settings when not provided', () => {
+    const result = validate({ DATABASE_URL: 'mysql://localhost/test' });
+    expect(result.OPENAI_MODEL).toBe('gpt-4o');
+    expect(result.OPENAI_MAX_TOKENS).toBe('1000');
+    expect(result.OPENAI_TEMPERATURE).toBe('0.7');
+  });
+
   it('accepts explicit NODE_ENV and PORT values', () => {
     const result = validate({
       DATABASE_URL: 'mysql://localhost/test',
@@ -35,6 +42,15 @@ describe('env validate()', () => {
   it('throws when PORT is not a numeric string', () => {
     expect(() =>
       validate({ DATABASE_URL: 'mysql://localhost/test', PORT: 'banana' }),
+    ).toThrow();
+  });
+
+  it('throws when OPENAI_MAX_TOKENS is not numeric', () => {
+    expect(() =>
+      validate({
+        DATABASE_URL: 'mysql://localhost/test',
+        OPENAI_MAX_TOKENS: 'lots',
+      }),
     ).toThrow();
   });
 });

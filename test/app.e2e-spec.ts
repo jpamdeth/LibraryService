@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { configureApp } from '../src/app.setup';
 
 describe('LibraryService (e2e)', () => {
   let app: INestApplication;
@@ -14,6 +15,7 @@ describe('LibraryService (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    configureApp(app);
     prisma = moduleFixture.get<PrismaService>(PrismaService);
 
     await app.init();
@@ -36,7 +38,16 @@ describe('LibraryService (e2e)', () => {
       return request(app.getHttpServer())
         .get('/health')
         .expect(200)
-        .expect('up and running!');
+        .expect((res) => {
+          expect(res.body).toMatchObject({
+            service: 'LibraryService',
+            status: 'ok',
+            version: '1.0',
+          });
+          expect(new Date(res.body.timestamp).toString()).not.toBe(
+            'Invalid Date',
+          );
+        });
     });
   });
 

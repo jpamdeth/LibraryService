@@ -1,16 +1,20 @@
 import {
   Body,
+  BadRequestException,
   Controller,
   Delete,
   Get,
+  Headers,
   HttpCode,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
 import { LibraryService } from './library.service';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation } from '@nestjs/swagger';
 import { AuthorDto, BookDto, GenreDto, SuggestionsDto } from './library.dto';
+
+const OPENAI_API_KEY_HEADER = 'x-openai-api-key';
 
 @Controller('library')
 export class LibraryController {
@@ -117,20 +121,51 @@ export class LibraryController {
 
   @Post('suggestions/:authorId')
   @ApiOperation({ summary: 'get book suggestions for an author' })
+  @ApiHeader({
+    name: OPENAI_API_KEY_HEADER,
+    required: false,
+    description:
+      'Bring your own OpenAI API key. Prefer this header over the request body.',
+  })
   async getSuggestions(
     @Param('authorId') authorId: string,
     @Body() { apiKey }: SuggestionsDto,
+    @Headers(OPENAI_API_KEY_HEADER) apiKeyHeader?: string,
   ) {
-    return this.service.suggestBooks(authorId, apiKey);
+    return this.service.suggestBooks(
+      authorId,
+      this.resolveApiKey(apiKeyHeader, apiKey),
+    );
   }
 
   @Post('suggestions/:firstName/:lastName')
   @ApiOperation({ summary: 'get book suggestions for an author by name' })
+  @ApiHeader({
+    name: OPENAI_API_KEY_HEADER,
+    required: false,
+    description:
+      'Bring your own OpenAI API key. Prefer this header over the request body.',
+  })
   async getSuggestionsByName(
     @Param('firstName') firstName: string,
     @Param('lastName') lastName: string,
     @Body() { apiKey }: SuggestionsDto,
+    @Headers(OPENAI_API_KEY_HEADER) apiKeyHeader?: string,
   ) {
-    return this.service.createAndSuggestBooks(firstName, lastName, apiKey);
+    return this.service.createAndSuggestBooks(
+      firstName,
+      lastName,
+      this.resolveApiKey(apiKeyHeader, apiKey),
+    );
+  }
+
+  private resolveApiKey(apiKeyHeader?: string, apiKeyBody?: string): string {
+    const apiKey = apiKeyHeader?.trim() || apiKeyBody?.trim();
+    if (!apiKey) {
+      throw new BadRequestException(
+        `Provide an OpenAI API key using the ${OPENAI_API_KEY_HEADER} header or apiKey request body field.`,
+      );
+    }
+    return apiKey;
   }
 }

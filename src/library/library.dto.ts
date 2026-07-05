@@ -77,13 +77,13 @@ export class GenreDto {
 }
 
 export class SuggestionsDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'OpenAI API key',
     example: 'sk-...',
   })
-  @IsNotEmpty({ message: 'API key is required' })
+  @IsOptional()
   @IsString()
-  apiKey: string;
+  apiKey?: string;
 }
 
 export class BookDto {
