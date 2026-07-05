@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit(/.claude/skills/improve-arch/**)",
+      "Bash(npm outdated:*)",
+      "Bash(npm audit:*)",
+      "Bash(npx eslint:*)",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); try { const j=JSON.parse\\(d\\); console.log\\('vulns:', JSON.stringify\\(j.metadata?.vulnerabilities\\)\\); console.log\\('advisories count:', Object.keys\\(j.vulnerabilities||{}\\).length\\); } catch\\(e\\) { console.log\\(d.slice\\(0,500\\)\\); }\")",
+      "Bash(npx jest:*)",
+      "Bash(npx prisma:*)",
+      "Bash(node -e \"const o = require\\('openai'\\); console.log\\(Object.keys\\(o\\)\\)\")",
+      "Bash(node -e \"const o = require\\('openai'\\); const r = require\\('openai/resources'\\); console.log\\(Object.keys\\(r\\).filter\\(k => k.includes\\('Chat'\\) || k.includes\\('Completion'\\)\\).slice\\(0,10\\)\\)\")",
+      "Bash(node -e \"process.stdin.resume\\(\\);let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{try{const r=JSON.parse\\(d\\);const issues=r.filter\\(f=>f.errorCount>0||f.warningCount>0\\);console.log\\(issues.length?JSON.stringify\\(issues,null,2\\):'No ESLint issues'\\);}catch\\(e\\){console.log\\(d.slice\\(0,300\\)\\);}}\\)\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(npm run:*)",
+      "Bash(npm show:*)",
+      "Bash(node -e \"const v=JSON.parse\\(require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\)\\); console.log\\(v.filter\\(x=>x.startsWith\\('6'\\)\\).slice\\(-5\\).join\\('\\\\n'\\)\\)\")",
+      "Bash(cat eslint.config.mjs)",
+      "Bash(cat eslint.config.js)",
+      "Bash(cat .eslintrc.js)",
+      "Bash(node -e \" const data = JSON.parse\\(require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\) || '[]'\\); const counts = {}; for \\(const f of data\\) { for \\(const m of f.messages\\) { const k = m.ruleId || 'parse-error'; counts[k] = \\(counts[k]||0\\)+1; } } console.log\\(JSON.stringify\\(counts,null,2\\)\\); \")",
+      "Bash(python -c \" import sys,json data=json.load\\(sys.stdin\\) counts={} for f in data: for m in f['messages']: k=m.get\\('ruleId','parse-error'\\) counts[k]=counts.get\\(k,0\\)+1 print\\(json.dumps\\(counts,indent=2\\)\\) \")"
+    ]
+  }
+}

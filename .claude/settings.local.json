@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find . -type f \\\\\\( -name \"*.yml\" -o -name \"*.yaml\" \\\\\\) ! -path \"*/node_modules/*\" -exec head -5 {} \\\\;)",
+      "Bash(npm list:*)",
+      "Bash(wc -l /d/Code/vscode/LibraryService/src/**/*.ts)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(echo \"EXIT:$?\")",
+      "WebFetch(domain:docs.anthropic.com)"
+    ]
+  }
+}
