@@ -3,35 +3,36 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nest-api
-    restart: always
     ports:
-      - '3000:3000'
+      - '127.0.0.1:${LIBRARY_API_PORT:-3000}:3000'
     depends_on:
       nest-mysql:
         condition: service_healthy
     environment:
-      - DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@nest-mysql:3306/${MYSQL_DATABASE}
+      # Local Compose network only. For a remote database, configure verified TLS.
+      DATABASE_URL: mysql://${MYSQL_USER:?set MYSQL_USER}:${MYSQL_PASSWORD:?set MYSQL_PASSWORD}@nest-mysql:3306/${MYSQL_DATABASE:?set MYSQL_DATABASE}?allowPublicKeyRetrieval=true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 24
 
   nest-mysql:
-    image: mysql:8
-    container_name: nest-mysql
-    command: --mysql-native-password=ON
-    restart: always
+    image: mysql:26.10.0
     ports:
-      - '3306:3306'
+      - '127.0.0.1:${LIBRARY_MYSQL_PORT:-3306}:3306'
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?set MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER:?set MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD}
     healthcheck:
-      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p${MYSQL_ROOT_PASSWORD}']
-      timeout: 20s
-      retries: 10
+      test: ["CMD-SHELL", 'MYSQL_PWD="$$MYSQL_PASSWORD" mysql --protocol=TCP --host=127.0.0.1 --user="$$MYSQL_USER" --database="$$MYSQL_DATABASE" --execute="SELECT 1"']
+      interval: 5s
+      timeout: 5s
+      retries: 24
     volumes:
       - nest-mysql:/var/lib/mysql
 
 volumes:
   nest-mysql:
-    name: nest-mysql-db
