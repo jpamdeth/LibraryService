@@ -27,10 +27,10 @@ flowchart LR
 
 ## Tech Stack
 
-- Runtime: Node.js 26
+- Runtime: Node.js 26.13.1 LTS
 - Framework: NestJS 12
 - ORM: Prisma 7
-- Database: MySQL 8
+- Database: MySQL 26.10.0 (Innovation release)
 - API docs: Swagger at `/api`
 - Tests: Jest, Supertest, ts-jest
 
@@ -45,7 +45,7 @@ cp .env.example .env
 Install dependencies and generate the Prisma client:
 
 ```bash
-npm ci
+npm ci --ignore-scripts
 npm run prisma:generate
 ```
 
@@ -59,10 +59,12 @@ npm run start:dev
 Or run the full local stack with Docker:
 
 ```bash
-docker compose up --build
+docker compose up --build --wait
 ```
 
-The API listens on `http://localhost:3000`.
+The API listens on `http://localhost:3000`. Both the API and MySQL are bound to the local machine. Set `LIBRARY_API_PORT` or `LIBRARY_MYSQL_PORT` to use a different host port; if you change the MySQL port, update the host-side `DATABASE_URL` for commands you run outside Docker.
+
+The updated Compose stack uses a fresh, project-scoped database volume. If you have data in the old `nest-mysql-db` volume, back it up and migrate it separately. Do not attach the old MySQL 8 data directory directly to the new server. The local demo connection allows retrieval of the MySQL authentication public key; configure verified TLS instead for a remote server.
 
 ## Useful Commands
 
@@ -150,4 +152,6 @@ erDiagram
 
 ## Quality Gates
 
-CI runs dependency installation, Prisma generation, lint, build, unit tests with coverage thresholds, and `npm audit --audit-level=moderate`. Current dependency checks are clean with no reported npm audit vulnerabilities.
+CI runs dependency installation, Prisma generation, lint, build, unit tests with coverage thresholds, and `npm audit --audit-level=moderate`. A second job builds and starts the production Compose stack, checks the health endpoint and OpenAPI document, and runs the end-to-end suite against disposable MySQL. **Never run the end-to-end suite against a database you want to keep:** it deletes catalog rows during test setup.
+
+TypeScript stays on 6.0 because the current NestJS schematics, `ts-jest`, and TypeScript ESLint releases do not support TypeScript 7. Prisma stays on the latest stable 7.x release while Prisma 8 is a release candidate.

@@ -1,35 +1,35 @@
-FROM node:26 AS builder
+FROM node:26.13.1 AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
 COPY prisma ./prisma/
+COPY prisma.config.ts ./prisma.config.ts
 COPY tsconfig.json ./tsconfig.json
 COPY tsconfig.build.json ./tsconfig.build.json
 COPY nest-cli.json ./nest-cli.json
 
-RUN npm ci
+RUN npm ci --ignore-scripts
 
-RUN npx prisma generate
+RUN CHECKPOINT_DISABLE=1 npx prisma generate
 
 COPY . .
 
 RUN npm run build
 
-FROM node:26
+FROM node:26.13.1
 
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV CHECKPOINT_DISABLE=1
 
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
-RUN npm ci --omit=dev && npx prisma generate
-
-ENV DATABASE_URL=mysql://library:library@nest-mysql:3306/library
+RUN npm ci --ignore-scripts --omit=dev && npx prisma generate
 
 EXPOSE 3000
 
