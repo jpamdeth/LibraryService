@@ -6,7 +6,7 @@ LibraryService is a NestJS REST API for managing a small library catalog of auth
 
 ## Highlights
 
-- NestJS 11 REST API with global validation, throttling, Swagger, and normalized error responses.
+- NestJS 12 REST API with global validation, throttling, Swagger, and normalized error responses.
 - Prisma 7 data layer backed by MySQL.
 - CRUD endpoints for authors, genres, and books.
 - BYOK OpenAI suggestions using `X-OpenAI-API-Key` or the legacy `apiKey` request body field.
@@ -28,7 +28,7 @@ flowchart LR
 ## Tech Stack
 
 - Runtime: Node.js 26
-- Framework: NestJS 11
+- Framework: NestJS 12
 - ORM: Prisma 7
 - Database: MySQL 8
 - API docs: Swagger at `/api`

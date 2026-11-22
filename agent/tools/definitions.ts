@@ -59,7 +59,7 @@ export const toolDefinitions: Anthropic.Tool[] = [
   {
     name: 'run_command',
     description:
-      'Run a shell command and return stdout + stderr. Use for npm outdated, jest --coverage, eslint, etc. Commands are run from the project root unless cwd is specified.',
+      'Run a shell command and return stdout + stderr. Use for npm outdated, npm run test:ci, eslint, etc. Commands are run from the project root unless cwd is specified.',
     input_schema: {
       type: 'object' as const,
       properties: {

@@ -22,8 +22,8 @@ npm run test:e2e         # E2E tests (test/app.e2e-spec.ts)
 npm run test:cov         # Unit tests with coverage
 
 # Run a single test file or test by name
-npx jest --testPathPattern=library.service
-npx jest --testNamePattern="should create an author"
+npm test -- --testPathPatterns=library.service
+npm test -- --testNamePattern="should create an author"
 
 # Database
 npx prisma migrate dev   # Create and apply a new migration

@@ -14,7 +14,7 @@ Steps to follow:
    - Are all public methods tested?
    - Are error/edge-case paths tested (not-found, validation failures, etc.)?
    - Are mocks realistic or do they paper over important logic?
-5. Run \`npx jest --coverage --coverageReporters=text-summary 2>&1\` to get line coverage numbers.
+5. Run \`npm run test:ci 2>&1\` to get line coverage numbers.
    Use the summary to prioritise which gaps matter most.
 6. When you identify a missing test, describe exactly what scenario to test and why it matters.
 

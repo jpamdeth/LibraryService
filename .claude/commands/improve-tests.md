@@ -9,7 +9,7 @@ Steps:
 1. List all source files under `src/` — exclude `*.spec.ts`, `*.module.ts`, `main.ts`, and files in `dto/`.
 2. List all spec files under `src/` and map each to its source counterpart.
 3. Flag source files that have no spec at all.
-4. Run `npx jest --coverage --coverageReporters=text-summary 2>&1` to get overall line coverage.
+4. Run `npm run test:ci 2>&1` to get overall line coverage.
 5. For source files that do have specs, read both files and check:
    - Are all public methods exercised by at least one test?
    - Are error paths tested — e.g. what happens when Prisma throws, or a record is not found?

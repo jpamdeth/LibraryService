@@ -19,7 +19,7 @@ Run a full codebase improvement analysis. Work through each of the four areas be
 
 - List all source files under `src/` (excluding `*.spec.ts`, `*.module.ts`, `main.ts`, and dto files).
 - List all spec files and map them to their source counterparts.
-- Run `npx jest --coverage --coverageReporters=text-summary 2>&1` to get line coverage numbers.
+- Run `npm run test:ci 2>&1` to get line coverage numbers.
 - For source files with specs, read both and check: are all public methods tested? Are error paths and not-found cases covered?
 - Flag every meaningful gap with the specific method or branch that is untested.
 
